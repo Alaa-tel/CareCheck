@@ -1,7 +1,7 @@
 <template>
   <div class="view question-view">
     <div class="card">
-      <ProgressBar :current="currentStep" :total="6" />
+      <ProgressBar :current="currentStep" :total="7" />
 
       <h1>{{ currentQuestion.question }}</h1>
       <p class="subtitle">{{ currentQuestion.subtitle }}</p>
@@ -11,7 +11,7 @@
           v-for="option in currentQuestion.options"
           :key="option.id"
           class="btn btn-option"
-          :class="{ active: checkInState.answers[currentQuestion.id] === option.id }"
+          :class="{ active: appStore.answers[getAnswerKey(questionId)] === option.id }"
           @click="selectAnswer(option.id)"
         >
           {{ option.label }}
@@ -23,7 +23,7 @@
         <button 
           class="btn btn-primary" 
           @click="continueNext"
-          :disabled="!checkInState.answers[currentQuestion.id]"
+          :disabled="!appStore.answers[getAnswerKey(questionId)]"
         >
           {{ isLastQuestion ? 'Review' : 'Next' }}
         </button>
@@ -34,54 +34,29 @@
 
 <script setup>
 import { useRouter, useRoute } from 'vue-router'
-import { checkInState } from '../store/checkInState'
+import { useAppStore } from '../store/appStore'
 import ProgressBar from '../components/ProgressBar.vue'
 
 const router = useRouter()
 const route = useRoute()
+const appStore = useAppStore()
 
-const questions = [
-  {
-    id: 'fever-temperature',
-    question: 'Do you have a fever?',
-    subtitle: 'How high is your temperature?',
-    options: [
-      { id: 'no-fever', label: 'No, I don\'t have a fever' },
-      { id: 'under-101', label: 'Under 101°F (38.3°C)' },
-      { id: 'between-101-104', label: '101-104°F (38.3-40°C)' },
-      { id: 'above-104', label: 'Above 104°F (40°C)' }
-    ]
-  },
-  {
-    id: 'fever-duration',
-    question: 'How long have you had symptoms?',
-    subtitle: 'This helps us understand severity',
-    options: [
-      { id: 'less-than-24h', label: 'Less than 24 hours' },
-      { id: '1-3-days', label: '1-3 days' },
-      { id: 'more-than-3-days', label: 'More than 3 days' },
-      { id: 'more-than-week', label: 'More than a week' }
-    ]
-  },
-  {
-    id: 'worsening',
-    question: 'Are your symptoms getting worse?',
-    subtitle: 'Tell us about the trend',
-    options: [
-      { id: 'no', label: 'Staying the same' },
-      { id: 'yes', label: 'Getting worse' },
-      { id: 'improving', label: 'Getting better' }
-    ]
+const getAnswerKey = (questionId) => {
+  const keyMap = {
+    1: 'temperature',
+    2: 'duration',
+    3: 'progression'
   }
-]
+  return keyMap[questionId]
+}
 
 const questionId = parseInt(route.params.questionId)
-const currentStep = questionId + 2 // Step 1 is home, Step 2 is symptoms
-const currentQuestion = questions[questionId - 1]
-const isLastQuestion = questionId === questions.length
+const currentStep = questionId + 3 // Step 1 is home, Step 2 is patient-type, Step 3 is symptoms
+const currentQuestion = appStore.questions[questionId - 1]
+const isLastQuestion = questionId === appStore.questions.length
 
 const selectAnswer = (optionId) => {
-  checkInState.setAnswer(currentQuestion.id, optionId)
+  appStore.setAnswer(questionId, optionId)
 }
 
 const continueNext = () => {

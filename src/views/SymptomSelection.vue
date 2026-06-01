@@ -1,7 +1,7 @@
 <template>
   <div class="view symptom-selection-view">
     <div class="card">
-      <ProgressBar :current="2" :total="6" />
+      <ProgressBar :current="3" :total="7" />
       
       <div class="header">
         <h1>What symptoms are you experiencing?</h1>
@@ -10,23 +10,23 @@
 
       <div class="symptom-chips">
         <button
-          v-for="symptom in availableSymptoms"
+          v-for="symptom in appStore.availableSymptoms"
           :key="symptom.id"
           class="chip"
-          :class="{ 'chip--selected': checkInState.selectedSymptoms.includes(symptom.id) }"
+          :class="{ 'chip--selected': appStore.selectedSymptoms.includes(symptom.id) }"
           @click="toggleSymptom(symptom.id)"
-          :aria-pressed="checkInState.selectedSymptoms.includes(symptom.id)"
+          :aria-pressed="appStore.selectedSymptoms.includes(symptom.id)"
         >
           <span class="chip__icon">{{ symptom.icon }}</span>
           <span class="chip__label">{{ symptom.label }}</span>
-          <span v-if="checkInState.selectedSymptoms.includes(symptom.id)" class="chip__check">✓</span>
+          <span v-if="appStore.selectedSymptoms.includes(symptom.id)" class="chip__check">✓</span>
         </button>
       </div>
 
       <div class="selection-info">
-        <span v-if="checkInState.selectedSymptoms.length > 0" class="selected-count">
-          {{ checkInState.selectedSymptoms.length }} 
-          {{ checkInState.selectedSymptoms.length === 1 ? 'symptom' : 'symptoms' }} selected
+        <span v-if="appStore.selectedSymptoms.length > 0" class="selected-count">
+          {{ appStore.selectedSymptoms.length }} 
+          {{ appStore.selectedSymptoms.length === 1 ? 'symptom' : 'symptoms' }} selected
         </span>
         <span v-else class="no-selection">Choose at least one symptom to continue</span>
       </div>
@@ -36,7 +36,7 @@
         <button 
           class="btn btn-primary" 
           @click="continueNext"
-          :disabled="checkInState.selectedSymptoms.length === 0"
+          :disabled="appStore.selectedSymptoms.length === 0"
         >
           Continue
         </button>
@@ -47,27 +47,17 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { checkInState } from '../store/checkInState'
+import { useAppStore } from '../store/appStore'
 import ProgressBar from '../components/ProgressBar.vue'
 
 const router = useRouter()
-
-const availableSymptoms = [
-  { id: 'fever', label: 'Fever', icon: '🌡️' },
-  { id: 'cough', label: 'Cough', icon: '😷' },
-  { id: 'fatigue', label: 'Fatigue', icon: '😴' },
-  { id: 'sore-throat', label: 'Sore Throat', icon: '😣' },
-  { id: 'headache', label: 'Headache', icon: '🤕' },
-  { id: 'shortness-of-breath', label: 'Shortness of Breath', icon: '🫁' },
-  { id: 'chest-pain', label: 'Chest Pain', icon: '💔' },
-  { id: 'dizziness', label: 'Dizziness', icon: '😵' }
-]
+const appStore = useAppStore()
 
 const toggleSymptom = (symptomId) => {
-  if (checkInState.selectedSymptoms.includes(symptomId)) {
-    checkInState.removeSymptom(symptomId)
+  if (appStore.selectedSymptoms.includes(symptomId)) {
+    appStore.removeSymptom(symptomId)
   } else {
-    checkInState.addSymptom(symptomId)
+    appStore.addSymptom(symptomId)
   }
 }
 
@@ -76,7 +66,7 @@ const continueNext = () => {
 }
 
 const goBack = () => {
-  router.push('/')
+  router.push('/patient-type')
 }
 </script>
 

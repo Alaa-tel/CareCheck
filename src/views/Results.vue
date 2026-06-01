@@ -1,36 +1,25 @@
 <template>
   <div class="view results-view">
     <div class="card">
-      <ProgressBar :current="6" :total="6" />
+      <ProgressBar :current="7" :total="7" />
 
       <h1>Your Recommendation</h1>
 
-      <div class="result-container" :class="recommendationClass">
+      <div class="result-container" :class="resultClass">
         <div class="result-icon">{{ resultIcon }}</div>
         <div class="result-title">{{ resultTitle }}</div>
         <div class="result-subtitle">{{ resultSubtitle }}</div>
         <div class="result-description">{{ resultDescription }}</div>
       </div>
 
-      <div class="next-steps">
-        <h3>Next Steps</h3>
-        <ul>
-          <li v-for="(step, index) in nextSteps" :key="index">
-            {{ step }}
-          </li>
-        </ul>
-      </div>
-
       <div class="severity-info">
-        <small>Severity Score: {{ checkInState.severityScore }}/10</small>
+        <small>Severity Score: {{ appStore.severityScore }}/10</small>
       </div>
 
       <div class="actions">
-        <button class="btn btn-secondary" @click="startOver">
-          New Check
-        </button>
-        <button class="btn btn-outline">
-          Share Results
+        <button class="btn btn-secondary" @click="goBack">Back</button>
+        <button class="btn btn-primary" @click="viewNextSteps">
+          Next Steps
         </button>
       </div>
     </div>
@@ -39,64 +28,84 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { checkInState } from '../store/checkInState'
+import { useAppStore } from '../store/appStore'
 import ProgressBar from '../components/ProgressBar.vue'
+import { computed } from 'vue'
 
 const router = useRouter()
+const appStore = useAppStore()
 
-const recommendations = {
-  selfcare: {
-    icon: '✅',
-    title: 'Self-Care',
-    subtitle: 'Your symptoms suggest rest and home care',
-    description: 'Monitor your symptoms and take care of yourself. Most common illnesses improve with rest, fluids, and time.',
-    class: 'result-selfcare',
-    steps: [
-      'Stay hydrated - drink plenty of water',
-      'Get adequate rest',
-      'Monitor your symptoms',
-      'Seek care if symptoms worsen'
-    ]
-  },
-  schedule: {
-    icon: '📅',
-    title: 'Schedule an Appointment',
-    subtitle: 'You should see your healthcare provider',
-    description: 'Your symptoms warrant professional evaluation. Schedule an appointment with your doctor when convenient.',
-    class: 'result-schedule',
-    steps: [
-      'Contact your healthcare provider',
-      'Schedule an appointment',
-      'Prepare a list of your symptoms',
-      'Mention any other health conditions'
-    ]
-  },
-  urgent: {
-    icon: '🚨',
-    title: 'Seek Urgent Care',
-    subtitle: 'You should get care today',
-    description: 'Your symptoms require prompt medical attention. Visit an urgent care clinic or emergency room.',
-    class: 'result-urgent',
-    steps: [
-      'Go to urgent care or ER now',
-      'Bring your ID and insurance card',
-      'Be prepared to describe your symptoms',
-      'Do not drive if dizzy or in severe pain'
-    ]
+const resultIcon = computed(() => {
+  switch (appStore.riskLevel) {
+    case 'low':
+      return '✅'
+    case 'medium':
+      return '📋'
+    case 'high':
+      return '🚨'
+    default:
+      return '❓'
   }
+})
+
+const resultTitle = computed(() => {
+  switch (appStore.riskLevel) {
+    case 'low':
+      return 'Self-Care'
+    case 'medium':
+      return 'Schedule an Appointment'
+    case 'high':
+      return 'Seek Urgent Care'
+    default:
+      return 'Assessment Complete'
+  }
+})
+
+const resultSubtitle = computed(() => {
+  switch (appStore.riskLevel) {
+    case 'low':
+      return 'Your symptoms suggest rest and home care'
+    case 'medium':
+      return 'You should see your healthcare provider'
+    case 'high':
+      return 'You should get care today'
+    default:
+      return 'Please follow the guidance below'
+  }
+})
+
+const resultDescription = computed(() => {
+  switch (appStore.riskLevel) {
+    case 'low':
+      return 'Monitor your symptoms and take care of yourself. Most common illnesses improve with rest, fluids, and time.'
+    case 'medium':
+      return 'Your symptoms warrant professional evaluation. Schedule an appointment with your doctor when convenient.'
+    case 'high':
+      return 'Your symptoms require prompt medical attention. Visit an urgent care clinic or emergency room.'
+    default:
+      return 'Assessment complete.'
+  }
+})
+
+const resultClass = computed(() => {
+  switch (appStore.riskLevel) {
+    case 'low':
+      return 'result-selfcare'
+    case 'medium':
+      return 'result-schedule'
+    case 'high':
+      return 'result-urgent'
+    default:
+      return ''
+  }
+})
+
+const goBack = () => {
+  router.push('/summary')
 }
 
-const rec = recommendations[checkInState.recommendation]
-const resultIcon = rec.icon
-const resultTitle = rec.title
-const resultSubtitle = rec.subtitle
-const resultDescription = rec.description
-const recommendationClass = rec.class
-const nextSteps = rec.steps
-
-const startOver = () => {
-  checkInState.reset()
-  router.push('/')
+const viewNextSteps = () => {
+  router.push('/action')
 }
 </script>
 

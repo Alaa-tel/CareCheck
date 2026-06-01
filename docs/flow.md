@@ -1,23 +1,56 @@
-# User Flow
+# User Flow — CareCheck
+
+This flow is designed to help users quickly complete a symptom check-in and receive clear next steps in a mobile context.
+
+---
 
 ## Step 1: Home
-- CTA: Start check
 
-## Step 2: Symptom Selection
-- User selects symptoms
-- CTA: Continue
+**Purpose:**
+Provide a clear entry point into the experience
 
-## Step 3: Question 1
-- Example: Do you have a fever?
+**UI:**
+- App name: CareCheck
+- Short description
+- Primary CTA: "Start Check-In"
 
-## Step 4: Question 2
-- Example: How long have you had symptoms?
+---
 
-## Step 5: Summary
-- Display selected symptoms + answers
+## Step 2: Patient Selection
 
-## Step 6: Results
-- Show recommendation:
-  - Low → Self-care
-  - Medium → Schedule
-  - High → Urgent care
+**Purpose:**
+Add context for who the check-in is for
+
+**Question:**
+"Who is this check-in for?"
+
+**Options:**
+- Myself
+- Someone else
+
+---
+
+## Step 3: Symptom Selection
+
+**Purpose:**
+Allow user to quickly select symptoms
+
+**Interaction:**
+- Multi-select chips (tap-based)
+- Minimal typing
+
+**CTA:**
+- Continue (enabled after selection)
+
+---
+
+## Step 4: Symptom Questions
+
+**Purpose:**
+Understand severity and context
+
+**Pattern:**
+- One question per screen
+
+**Examples:**
+- "Do you have a fever?"

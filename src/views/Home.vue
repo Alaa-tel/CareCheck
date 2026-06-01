@@ -22,13 +22,14 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { checkInState } from '../store/checkInState'
+import { useAppStore } from '../store/appStore'
 
 const router = useRouter()
+const appStore = useAppStore()
 
 const startCheck = () => {
-  checkInState.reset()
-  router.push('/symptoms')
+  appStore.reset()
+  router.push('/patient-type')
 }
 </script>
 

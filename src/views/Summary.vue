@@ -1,7 +1,7 @@
 <template>
   <div class="view summary-view">
     <div class="card">
-      <ProgressBar :current="5" :total="6" />
+      <ProgressBar :current="6" :total="7" />
 
       <h1>Review Your Information</h1>
       <p class="subtitle">Make sure everything looks correct</p>
@@ -19,9 +19,14 @@
       <div class="section">
         <h3>Your Answers</h3>
         <div class="answers-list">
-          <div v-for="(answer, questionId) in checkInState.answers" :key="questionId" class="answer-item">
-            <span class="question">{{ getQuestionLabel(questionId) }}</span>
-            <span class="answer">{{ getAnswerLabel(questionId, answer) }}</span>
+          <div 
+            v-for="(questionId, index) in [1, 2, 3]" 
+            :key="index" 
+            class="answer-item"
+            v-show="appStore.answers[getAnswerKey(questionId)]"
+          >
+            <span class="question">{{ getQuestionText(questionId) }}</span>
+            <span class="answer">{{ getAnswerLabel(questionId, appStore.answers[getAnswerKey(questionId)]) }}</span>
           </div>
         </div>
       </div>
@@ -38,58 +43,33 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { checkInState } from '../store/checkInState'
+import { useAppStore } from '../store/appStore'
 import ProgressBar from '../components/ProgressBar.vue'
 
 const router = useRouter()
+const appStore = useAppStore()
 
-const symptomDetails = [
-  { id: 'fever', label: 'Fever', icon: '🌡️' },
-  { id: 'cough', label: 'Cough', icon: '😷' },
-  { id: 'fatigue', label: 'Fatigue', icon: '😴' },
-  { id: 'sore-throat', label: 'Sore Throat', icon: '😣' },
-  { id: 'headache', label: 'Headache', icon: '🤕' },
-  { id: 'shortness-of-breath', label: 'Shortness of Breath', icon: '🫁' },
-  { id: 'chest-pain', label: 'Chest Pain', icon: '💔' },
-  { id: 'dizziness', label: 'Dizziness', icon: '😵' }
-]
-
-const questionLabels = {
-  'fever-temperature': 'Temperature',
-  'fever-duration': 'Duration',
-  'worsening': 'Progression'
-}
-
-const answerLabels = {
-  'fever-temperature': {
-    'no-fever': 'No fever',
-    'under-101': 'Under 101°F',
-    'between-101-104': '101-104°F',
-    'above-104': 'Above 104°F'
-  },
-  'fever-duration': {
-    'less-than-24h': 'Less than 24 hours',
-    '1-3-days': '1-3 days',
-    'more-than-3-days': 'More than 3 days',
-    'more-than-week': 'More than a week'
-  },
-  'worsening': {
-    'no': 'Staying the same',
-    'yes': 'Getting worse',
-    'improving': 'Getting better'
+const getAnswerKey = (questionId) => {
+  const keyMap = {
+    1: 'temperature',
+    2: 'duration',
+    3: 'progression'
   }
+  return keyMap[questionId]
 }
 
-const selectedSymptomDetails = checkInState.selectedSymptoms.map(id =>
-  symptomDetails.find(s => s.id === id)
+const selectedSymptomDetails = appStore.selectedSymptoms.map(id =>
+  appStore.availableSymptoms.find(s => s.id === id)
 )
 
-const getQuestionLabel = (questionId) => {
-  return questionLabels[questionId] || questionId
+const getQuestionText = (questionId) => {
+  return appStore.questions[questionId - 1]?.text || ''
 }
 
-const getAnswerLabel = (questionId, answer) => {
-  return answerLabels[questionId]?.[answer] || answer
+const getAnswerLabel = (questionId, answerId) => {
+  const question = appStore.questions[questionId - 1]
+  const option = question?.options.find(o => o.id === answerId)
+  return option?.label || answerId
 }
 
 const goBack = () => {
@@ -97,7 +77,7 @@ const goBack = () => {
 }
 
 const getResults = () => {
-  checkInState.calculateSeverity()
+  appStore.calculateSeverity()
   router.push('/results')
 }
 </script>

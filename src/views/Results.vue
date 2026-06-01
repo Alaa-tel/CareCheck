@@ -1,7 +1,7 @@
 <template>
   <div class="view results-view">
     <div class="card">
-      <ProgressBar :current="7" :total="7" />
+      <ProgressBar :current="8" :total="8" />
 
       <h1>Your Recommendation</h1>
 

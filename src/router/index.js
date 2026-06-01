@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import PatientTypeView from '../views/PatientTypeView.vue'
+import AgeGroupView from '../views/AgeGroupView.vue'
 import SymptomSelection from '../views/SymptomSelection.vue'
 import Question from '../views/Question.vue'
 import Summary from '../views/Summary.vue'
@@ -17,6 +18,11 @@ const routes = [
     path: '/patient-type',
     name: 'PatientType',
     component: PatientTypeView
+  },
+  {
+    path: '/age-group',
+    name: 'AgeGroup',
+    component: AgeGroupView
   },
   {
     path: '/symptoms',

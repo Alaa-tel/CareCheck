@@ -1,7 +1,7 @@
 <template>
   <div class="view question-view">
     <div class="card">
-      <ProgressBar :current="currentStep" :total="7" />
+      <ProgressBar :current="currentStep" :total="8" />
 
       <h1>{{ currentQuestion.question }}</h1>
       <p class="subtitle">{{ currentQuestion.subtitle }}</p>
@@ -51,7 +51,7 @@ const getAnswerKey = (questionId) => {
 }
 
 const questionId = parseInt(route.params.questionId)
-const currentStep = questionId + 3 // Step 1 is home, Step 2 is patient-type, Step 3 is symptoms
+const currentStep = questionId + 4 // Step 1 is home, Step 2 is patient-type, Step 3 is age-group, Step 4 is symptoms
 const currentQuestion = appStore.questions[questionId - 1]
 const isLastQuestion = questionId === appStore.questions.length
 

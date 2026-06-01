@@ -1,32 +1,24 @@
 <template>
-  <div class="view patient-type-view">
+  <div class="view age-group-view">
     <div class="card">
-      <ProgressBar :current="2" :total="8" />
+      <ProgressBar :current="3" :total="8" />
       
       <div class="header">
-        <h1>Who is this check-in for?</h1>
-        <p class="subtitle">Let us know so we can provide better guidance</p>
+        <h1>{{ screenTitle }}</h1>
+        <p class="subtitle">This helps us give you better guidance</p>
       </div>
 
       <div class="button-group">
         <button
-          class="patient-button"
-          :class="{ 'patient-button--selected': appStore.patientType === 'myself' }"
-          @click="selectPatient('myself')"
+          v-for="group in ageGroups"
+          :key="group.id"
+          class="age-button"
+          :class="{ 'age-button--selected': appStore.ageGroup === group.id }"
+          @click="selectAgeGroup(group.id)"
         >
-          <span class="patient-icon">👤</span>
-          <span class="patient-label">Myself</span>
-          <span v-if="appStore.patientType === 'myself'" class="checkmark">✓</span>
-        </button>
-
-        <button
-          class="patient-button"
-          :class="{ 'patient-button--selected': appStore.patientType === 'other' }"
-          @click="selectPatient('other')"
-        >
-          <span class="patient-icon">👥</span>
-          <span class="patient-label">Someone else</span>
-          <span v-if="appStore.patientType === 'other'" class="checkmark">✓</span>
+          <span class="age-icon">{{ group.icon }}</span>
+          <span class="age-label">{{ group.label }}</span>
+          <span v-if="appStore.ageGroup === group.id" class="checkmark">✓</span>
         </button>
       </div>
 
@@ -35,7 +27,7 @@
         <button 
           class="btn btn-primary" 
           @click="continueNext"
-          :disabled="!appStore.patientType"
+          :disabled="!appStore.ageGroup"
         >
           Continue
         </button>
@@ -48,27 +40,43 @@
 import { useRouter } from 'vue-router'
 import { useAppStore } from '../store/appStore'
 import ProgressBar from '../components/ProgressBar.vue'
+import { computed } from 'vue'
 
 const router = useRouter()
 const appStore = useAppStore()
 
-const selectPatient = (type) => {
-  appStore.setPatientType(type)
+const ageGroups = [
+  { id: 'child', label: 'Child', icon: '👶' },
+  { id: 'adult', label: 'Adult', icon: '👤' },
+  { id: 'older_adult', label: 'Older adult', icon: '👴' }
+]
+
+const screenTitle = computed(() => {
+  if (appStore.patientType === 'myself') {
+    return 'Select your age group'
+  } else if (appStore.patientType === 'other') {
+    return 'Who are you checking for?'
+  }
+  return 'Select age group'
+})
+
+const selectAgeGroup = (id) => {
+  appStore.setAgeGroup(id)
 }
 
 const continueNext = () => {
-  if (appStore.patientType) {
-    router.push('/age-group')
+  if (appStore.ageGroup) {
+    router.push('/symptoms')
   }
 }
 
 const goBack = () => {
-  router.push('/')
+  router.push('/patient-type')
 }
 </script>
 
 <style scoped>
-.patient-type-view {
+.age-group-view {
   padding: 20px;
 }
 
@@ -106,7 +114,7 @@ h1 {
   margin-bottom: 32px;
 }
 
-.patient-button {
+.age-button {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -124,23 +132,23 @@ h1 {
   position: relative;
 }
 
-.patient-button:hover {
+.age-button:hover {
   border-color: #3498db;
   background-color: #f8fbff;
 }
 
-.patient-button--selected {
+.age-button--selected {
   background-color: #e8f4fd;
   border-color: #3498db;
   color: #2980b9;
 }
 
-.patient-icon {
+.age-icon {
   font-size: 32px;
   flex-shrink: 0;
 }
 
-.patient-label {
+.age-label {
   flex: 1;
 }
 
@@ -196,5 +204,20 @@ h1 {
 .btn-secondary:hover {
   background-color: #d5dbdb;
   transform: translateY(-2px);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .card {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  .age-icon {
+    font-size: 28px;
+  }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="view summary-view">
     <div class="card">
-      <ProgressBar :current="6" :total="7" />
+      <ProgressBar :current="7" :total="8" />
 
       <h1>Review Your Information</h1>
       <p class="subtitle">Make sure everything looks correct</p>

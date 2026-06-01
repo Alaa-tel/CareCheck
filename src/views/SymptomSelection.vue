@@ -1,7 +1,7 @@
 <template>
   <div class="view symptom-selection-view">
     <div class="card">
-      <ProgressBar :current="3" :total="7" />
+      <ProgressBar :current="4" :total="8" />
       
       <div class="header">
         <h1>What symptoms are you experiencing?</h1>
@@ -66,7 +66,7 @@ const continueNext = () => {
 }
 
 const goBack = () => {
-  router.push('/patient-type')
+  router.push('/age-group')
 }
 </script>
 

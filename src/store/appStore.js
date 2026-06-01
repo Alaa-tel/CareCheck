@@ -3,6 +3,7 @@ import { ref } from 'vue'
 
 export const useAppStore = defineStore('app', () => {
   const patientType = ref('')
+  const ageGroup = ref(null)
   const selectedSymptoms = ref([])
   const answers = ref({
     temperature: null,
@@ -56,6 +57,10 @@ export const useAppStore = defineStore('app', () => {
   // Actions
   const setPatientType = (type) => {
     patientType.value = type
+  }
+
+  const setAgeGroup = (group) => {
+    ageGroup.value = group
   }
 
   const addSymptom = (symptomId) => {
@@ -125,6 +130,7 @@ export const useAppStore = defineStore('app', () => {
 
   const reset = () => {
     patientType.value = ''
+    ageGroup.value = null
     selectedSymptoms.value = []
     answers.value = {
       temperature: null,
@@ -139,6 +145,7 @@ export const useAppStore = defineStore('app', () => {
   return {
     // State
     patientType,
+    ageGroup,
     selectedSymptoms,
     answers,
     severityScore,
@@ -148,6 +155,7 @@ export const useAppStore = defineStore('app', () => {
     questions,
     // Actions
     setPatientType,
+    setAgeGroup,
     addSymptom,
     removeSymptom,
     setAnswer,

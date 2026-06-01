@@ -1,10 +1,10 @@
 <template>
   <div class="view question-view">
-    <div class="card">
+    <div class="card" v-if="currentQuestion">
       <ProgressBar :current="currentStep" :total="8" />
 
-      <h1>{{ currentQuestion.question }}</h1>
-      <p class="subtitle">{{ currentQuestion.subtitle }}</p>
+      <h1>{{ currentQuestion.text }}</h1>
+      <p class="subtitle">Select your answer</p>
 
       <div class="options">
         <button
@@ -35,43 +35,44 @@
 <script setup>
 import { useRouter, useRoute } from 'vue-router'
 import { useAppStore } from '../store/appStore'
+import { computed } from 'vue'
 import ProgressBar from '../components/ProgressBar.vue'
 
 const router = useRouter()
 const route = useRoute()
 const appStore = useAppStore()
 
-const getAnswerKey = (questionId) => {
+const getAnswerKey = (qId) => {
   const keyMap = {
     1: 'temperature',
     2: 'duration',
     3: 'progression'
   }
-  return keyMap[questionId]
+  return keyMap[qId]
 }
 
-const questionId = parseInt(route.params.questionId)
-const currentStep = questionId + 4 // Step 1 is home, Step 2 is patient-type, Step 3 is age-group, Step 4 is symptoms
-const currentQuestion = appStore.questions[questionId - 1]
-const isLastQuestion = questionId === appStore.questions.length
+const questionId = computed(() => parseInt(route.params.questionId))
+const currentStep = computed(() => questionId.value + 4)
+const currentQuestion = computed(() => appStore.questions[questionId.value - 1])
+const isLastQuestion = computed(() => questionId.value === appStore.questions.length)
 
 const selectAnswer = (optionId) => {
-  appStore.setAnswer(questionId, optionId)
+  appStore.setAnswer(questionId.value, optionId)
 }
 
 const continueNext = () => {
-  if (isLastQuestion) {
+  if (isLastQuestion.value) {
     router.push('/summary')
   } else {
-    router.push(`/question/${questionId + 1}`)
+    router.push(`/question/${questionId.value + 1}`)
   }
 }
 
 const goBack = () => {
-  if (questionId === 1) {
+  if (questionId.value === 1) {
     router.push('/symptoms')
   } else {
-    router.push(`/question/${questionId - 1}`)
+    router.push(`/question/${questionId.value - 1}`)
   }
 }
 </script>

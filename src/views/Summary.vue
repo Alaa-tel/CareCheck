@@ -44,6 +44,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { useAppStore } from '../store/appStore'
+import { computed } from 'vue'
 import ProgressBar from '../components/ProgressBar.vue'
 
 const router = useRouter()
@@ -58,8 +59,10 @@ const getAnswerKey = (questionId) => {
   return keyMap[questionId]
 }
 
-const selectedSymptomDetails = appStore.selectedSymptoms.map(id =>
-  appStore.availableSymptoms.find(s => s.id === id)
+const selectedSymptomDetails = computed(() => 
+  appStore.selectedSymptoms.map(id =>
+    appStore.availableSymptoms.find(s => s.id === id)
+  )
 )
 
 const getQuestionText = (questionId) => {

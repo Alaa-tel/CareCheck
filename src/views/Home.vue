@@ -126,51 +126,51 @@ const startCheck = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #f0f4ff 0%, #fef3f8 50%, #f0f9ff 100%);
+  background: linear-gradient(135deg, #fce7f3 0%, #e9d5ff 50%, #f3e8ff 100%);
   z-index: 1;
 }
 
 .floating-shape {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.4;
-  filter: blur(60px);
+  opacity: 0.5;
+  filter: blur(80px);
   animation: float 20s infinite ease-in-out;
 }
 
 .shape-1 {
-  width: 300px;
-  height: 300px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.2));
-  top: -100px;
-  left: -100px;
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.4), rgba(168, 85, 247, 0.3));
+  top: 10%;
+  left: -10%;
   animation-delay: 0s;
 }
 
 .shape-2 {
-  width: 250px;
-  height: 250px;
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(99, 102, 241, 0.2));
-  bottom: 100px;
-  right: -50px;
+  width: 350px;
+  height: 350px;
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.35), rgba(139, 92, 246, 0.25));
+  bottom: 15%;
+  right: -5%;
   animation-delay: -7s;
 }
 
 .shape-3 {
-  width: 200px;
-  height: 200px;
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(139, 92, 246, 0.15));
-  top: 50%;
-  left: 20%;
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(99, 102, 241, 0.2));
+  top: 45%;
+  left: 15%;
   animation-delay: -14s;
 }
 
 .shape-4 {
-  width: 280px;
-  height: 280px;
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(99, 102, 241, 0.1));
-  bottom: -80px;
-  left: 50%;
+  width: 380px;
+  height: 380px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(168, 85, 247, 0.15));
+  bottom: 5%;
+  left: 40%;
   animation-delay: -10s;
 }
 
@@ -232,13 +232,10 @@ const startCheck = () => {
 .hero-title {
   font-size: 36px;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #1e1b4b;
   margin: 0;
-  background: var(--primary-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   letter-spacing: -0.5px;
+  text-shadow: 0 2px 4px rgba(99, 102, 241, 0.1);
 }
 
 .hero-subtitle {
@@ -346,31 +343,37 @@ const startCheck = () => {
 }
 
 .btn-primary {
-  background: var(--primary-gradient);
-  color: white;
-  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+  background: #8b5cf6;
+  color: #ffffff;
+  box-shadow: 0 12px 32px rgba(139, 92, 246, 0.4);
   transform: translateY(0);
+  font-weight: 700;
+  letter-spacing: 0.3px;
 }
 
 .btn-primary:hover {
   transform: translateY(-4px);
-  box-shadow: 0 14px 36px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 14px 36px rgba(139, 92, 246, 0.5);
+  background: #a78bfa;
 }
 
 .btn-primary:active {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
 }
 
 .btn-text {
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #ffffff;
 }
 
 .btn-arrow {
   display: inline-flex;
   transition: transform 0.3s ease;
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
 }
 
 .btn-primary:hover .btn-arrow {
